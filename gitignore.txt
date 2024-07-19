@@ -1,0 +1,71 @@
+# Ignore binary files
+*.o
+*.a
+*.so
+
+# Ignore executable files
+*.exe
+
+# Ignore build directories
+/build/
+out/
+bin/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore virtual environments
+venv/
+.env/
+
+# Ignore Node.js dependencies
+node_modules/
+
+# Ignore Java build files
+*.class
+*.jar
+*.war
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+.idea/
+.vscode/
+*.iml
+
+# Custom ignores
+path/to/custom/file_or_directory
+
+# Ignore images
+/images/
+*.xcf
+*.svg
+*.png
+*.webp
+!dall-e-*
+!span-dall*
+!favicon.svg
+!favicon.*
+!id1.png
+!id2.png
+
+#Ignore private files: p_
+p_*
+
+#Ignore...
+chatgpt.html
+chatgpt.css
+klausur.html
+test.html
+*.code-workspace
+gitignore.txt
+index.html
