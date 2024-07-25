@@ -1,67 +1,65 @@
 <!DOCTYPE html>
 <html lang="de">
-    <head>
-        <meta charset="UTF-8">
-        <title>APNG Disassembler</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <script src="UPNG.js"></script>
-    </head>
-    <body>
-        <form>
-            <input type="file" id="fileInput" placeholder="Datei auswählen">
-            <button type="submit" id="downloadAll" disabled>Download All Frames</button>
-            <div id="output"></div>
-        </form>
-        <script>
-            document.getElementById('fileInput').addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                const reader = new FileReader();
+<head>
+    <meta charset="UTF-8">
+    <title>APNG Disassembler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="UPNG.js"></script>
+</head>
+<body>
+    <input type="file" title="Title" id="fileInput" />
+    <button id="downloadAll" disabled>Download All Frames</button>
+    <div id="output"></div>
 
-                reader.onload = function(e) {
-                    const arrayBuffer = e.target.result;
-                    const apng = UPNG.decode(arrayBuffer);
-                    const frames = UPNG.toRGBA8(apng);
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
 
-                    const outputDiv = document.getElementById('output');
-                    const links = [];
-                    frames.forEach((frame, index) => {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = apng.width;
-                        canvas.height = apng.height;
-                        const ctx = canvas.getContext('2d');
-                        const imageData = ctx.createImageData(apng.width, apng.height);
-                        imageData.data.set(new Uint8ClampedArray(frame));
-                        ctx.putImageData(imageData, 0, 0);
+            reader.onload = function(e) {
+                const arrayBuffer = e.target.result;
+                const apng = UPNG.decode(arrayBuffer);
+                const frames = UPNG.toRGBA8(apng);
 
-                        const pngDataUrl = canvas.toDataURL("image/png");
+                const outputDiv = document.getElementById('output');
+                const links = [];
+                frames.forEach((frame, index) => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = apng.width;
+                    canvas.height = apng.height;
+                    const ctx = canvas.getContext('2d');
+                    const imageData = ctx.createImageData(apng.width, apng.height);
+                    imageData.data.set(new Uint8ClampedArray(frame));
+                    ctx.putImageData(imageData, 0, 0);
 
-                        // Display the frame in the output div
-                        outputDiv.appendChild(canvas);
+                    const pngDataUrl = canvas.toDataURL("image/png");
 
-                        // Create a link element to download the frame as a PNG file
-                        const link = document.createElement('a');
-                        link.href = pngDataUrl;
-                        link.download = `${file.name.split('.').slice(0, -1)}_frame_${index + 1}.png`;
-                        link.style.display = 'none';
-                        document.body.appendChild(link);
-                        links.push(link);
+                    // Display the frame in the output div
+                    outputDiv.appendChild(canvas);
+
+                    // Create a link element to download the frame as a PNG file
+                    const link = document.createElement('a');
+                    link.href = pngDataUrl;
+                    link.download = `${file.name.split('.').slice(0, -1)}_frame_${index + 1}.png`;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    links.push(link);
+                });
+
+                // Enable download button
+                const downloadButton = document.getElementById('downloadAll');
+                downloadButton.disabled = false;
+                downloadButton.onclick = function() {
+                    links.forEach((link, i) => {
+                        setTimeout(() => {
+                            link.click();
+                        }, i * 200); // Delay to avoid browser limitations
                     });
-
-                    // Enable download button
-                    const downloadButton = document.getElementById('downloadAll');
-                    downloadButton.disabled = false;
-                    downloadButton.onclick = function() {
-                        links.forEach((link, i) => {
-                            setTimeout(() => {
-                                link.click();
-                            }, i * 200); // Delay to avoid browser limitations
-                        });
-                    };
                 };
+            };
 
-                reader.readAsArrayBuffer(file);
-            });
-        </script>
-    </body>
+            reader.readAsArrayBuffer(file);
+        });
+    </script>
+</body>
 </html>
