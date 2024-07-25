@@ -39,7 +39,7 @@
                     // Create a link element to download the frame as a PNG file
                     const link = document.createElement('a');
                     link.href = pngDataUrl;
-                    link.download = `frame_${index + 1}.png`;
+                    link.download = `${file.name.split('.').slice(0, -1)}_frame_${index + 1}.png`;
                     link.style.display = 'none';
                     document.body.appendChild(link);
                     links.push(link);
